@@ -10,6 +10,7 @@ from light_classification.tl_classifier import TLClassifier
 import tf
 import cv2
 import yaml
+import time
 
 from scipy.spatial import KDTree
 
@@ -96,8 +97,21 @@ class TLDetector(object):
             self.state = state
             if state == TrafficLight.RED:
                 rospy.logwarn("Red Light ahead")
+                cv_image = self.bridge.imgmsg_to_cv2(self.camera_image,"bgr8")
+                file = "./imgs/red-{0:f}.jpeg".format(time.time()*100)
+                cv2.imwrite(file,cv_image)
+            elif state == TrafficLight.GREEN:
+                rospy.logwarn("Green Light ahead")
+                cv_image = self.bridge.imgmsg_to_cv2(self.camera_image,"bgr8")
+                file = "./imgs/green-{0:f}.jpeg".format(time.time()*100)
+                cv2.imwrite(file,cv_image)
+            elif state == TrafficLight.YELLOW:
+                rospy.logwarn("Yellow Light ahead")
+                cv_image = self.bridge.imgmsg_to_cv2(self.camera_image,"bgr8")
+                file = "./imgs/yellow-{0:f}.jpeg".format(time.time()*100)
+                cv2.imwrite(file,cv_image)
             else:
-                rospy.logwarn("Not Red Light ahead: %d", state)
+                rospy.logwarn("Unkonw Light ahead: %d", state)
         elif self.state_count >= STATE_COUNT_THRESHOLD:
             self.last_state = self.state
             light_wp = light_wp if state == TrafficLight.RED else -1
